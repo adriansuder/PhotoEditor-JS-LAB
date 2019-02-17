@@ -32,16 +32,6 @@ document.querySelector("#contrastPlus")
 document.querySelector("#contrast-")
     .addEventListener('click', (e)=> {contrast(-25)})   
 
-// function contrast(factor) {
-//     let imgData = ctx.getImageData(0,0,canva.width,canva.height)
-//     for(let i=0; i<imgData.data.length; i+=4){
-//         imgData.data[i]   = Math.min(255, imgData.data[i] * (factor));
-//         imgData.data[i+1] = Math.min(255, imgData.data[i+1] * (factor));
-//         imgData.data[i+2] = Math.min(255, imgData.data[i+2] * (factor));
-//     }
-//     ctx.putImageData(imgData, 0, 0)
-// }
-
 function contrast(factor) {
     let imgData = ctx.getImageData(0,0,canva.width,canva.height)
     // let C_MAX_CONTRAST = 255;
@@ -74,15 +64,18 @@ function contrast(factor) {
 }
 //zmiana nasycenia
 document.querySelector("#saturationPlus")
+    .addEventListener('click', (e)=> {saturation(1.5)})
+    document.querySelector("#saturation-")
     .addEventListener('click', (e)=> {saturation(0.5)})
-
 
 function saturation(factor){
     let imgData = ctx.getImageData(0,0,canva.width,canva.height)
+    
     for(let i=0; i<imgData.data.length; i+=4){
-        imgData.data[i]   = Math.min(255, Math.pow(imgData.data[i] , factor));
-        imgData.data[i+1] = Math.min(255, Math.pow(imgData.data[i+1] , factor));
-        imgData.data[i+2] = Math.min(255, Math.pow(imgData.data[i+2] , factor));
+        let gray = imgData.data[i] * 0.3086 + imgData.data[i+1] * 0.6094 + imgData.data[i+2] * 0.0820;
+        imgData.data[i]   = Math.round(imgData.data[i] * factor + gray * (1-factor));
+        imgData.data[i+1] = Math.round(imgData.data[i+1] * factor + gray * (1-factor));
+        imgData.data[i+2] = Math.round(imgData.data[i+2] * factor + gray * (1-factor));
     }
     ctx.putImageData(imgData, 0, 0)
-}5
+}
